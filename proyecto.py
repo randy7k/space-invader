@@ -10,7 +10,7 @@ listaEnemigos = []
 
 class NaveSpacial(pygame.sprite.Sprite):
 	""""Clase para las Naves"""
-		
+
 	def __init__(self):
 		pygame.sprite.Sprite.__init__(self)
 		self.ImagenNave = pygame.image.load("imagenes/nave.jpg")
@@ -24,7 +24,6 @@ class NaveSpacial(pygame.sprite.Sprite):
 		self.vida = True
 
 		self.velocidad = 5
-
 
 	def movimiento(self):
 		if self.vida == True:
@@ -100,7 +99,7 @@ class Invasor(pygame.sprite.Sprite):
 
 		self.derecha = True
 		self.contador = 0
-		self.maxdescenso = self.rect.top + 40 
+		self.maxdescenso = self.rect.top + 40
 
 		self.limiteDerecha = posx + distancia
 		self.limiteIzquierda = posx - distancia
@@ -169,21 +168,21 @@ def cargarEnemigos():
 	posy = -60
 	posx = 100
 	for x in range(0, 4):
-		enemigo = Invasor(posx, posy, 70, "imagenes/MarcianoA.jpg", "imagenes/MarcianoB.jpg") 
+		enemigo = Invasor(posx, posy, 70, "imagenes/MarcianoA.jpg", "imagenes/MarcianoB.jpg")
 		listaEnemigos.append(enemigo)
 		posx += 200
-	
+
 	posy -= 100
 	posx = 100
 	for x in range(0, 4):
-		enemigo = Invasor(posx, posy, 70, "imagenes/Marciano2A.jpg", "imagenes/Marciano2B.jpg") 
+		enemigo = Invasor(posx, posy, 70, "imagenes/Marciano2A.jpg", "imagenes/Marciano2B.jpg")
 		listaEnemigos.append(enemigo)
 		posx += 200
-	
+
 	posy -= 100
 	posx = 100
 	for x in range(0, 4):
-		enemigo = Invasor(posx, posy, 70, "imagenes/Marciano3A.jpg", "imagenes/Marciano3B.jpg") 
+		enemigo = Invasor(posx, posy, 70, "imagenes/Marciano3A.jpg", "imagenes/Marciano3B.jpg")
 		listaEnemigos.append(enemigo)
 		posx += 200
 
@@ -194,7 +193,7 @@ def SpaceInvader():
 	pygame.display.set_caption("Space Invader!!!")
 
 	ImagenFondo = pygame.image.load('imagenes/Fondo.jpg')
-	
+
 	jugador = NaveSpacial()
 
 	reloj = pygame.time.Clock()
@@ -206,25 +205,25 @@ def SpaceInvader():
 	derecha = False
 	izquierda = False
 
-	
-	while True:	
+
+	while True:
 		reloj.tick(60)
 		jugador.movimiento()
-	
+
 		tiempo = pygame.time.get_ticks()/1000
 
 
 		if len(listaEnemigos) == 0 and enJuego == True:
 			cargarEnemigos()
-			velocidadEnemigo += 1		
+			velocidadEnemigo += 1
 			aumentarVelocidad = True
 
 		if aumentarVelocidad == True:
 			for enemigo in listaEnemigos:
 				enemigo.velocidad = velocidadEnemigo + 1
-				print "velocidad del enemigo", enemigo.velocidad
+				print ("velocidad del enemigo", enemigo.velocidad)
 			aumentarVelocidad = False
-			
+
 
 		for event in pygame.event.get():
 			if event.type == QUIT:
@@ -240,7 +239,7 @@ def SpaceInvader():
 					elif event.key == K_SPACE:
 						x, y = jugador.rect.center
 						jugador.disparar(x-6, y-43)
-				
+
 				#Detener el movimiento al soltar el boton
 				elif event.type == pygame.KEYUP:
 					if event.key == K_LEFT:
@@ -255,7 +254,7 @@ def SpaceInvader():
 						detenerTodo()
 						iniciar()
 
-				
+
 
 		#continuidar el movimiento al mantener el boton precionado
 		if derecha == True:
@@ -266,7 +265,7 @@ def SpaceInvader():
 		ventana.blit(ImagenFondo, (0,0))
 
 		jugador.dibujar(ventana)
-		
+
 		#desaparecer el proyectil al salir de la ventana
 		if len(jugador.listaDisparo)>0:
 			for x in jugador.listaDisparo:
@@ -279,15 +278,15 @@ def SpaceInvader():
 					for enemigo in listaEnemigos:
 						if x.rect.colliderect(enemigo.rect):
 							puntaje = puntaje + 1
-							print puntaje
+							print (puntaje)
 							listaEnemigos.remove(enemigo)
 							jugador.listaDisparo.remove(x)
 
-		if listaEnemigos > 0:
+		if len(listaEnemigos) > 0:
 			for enemigo in listaEnemigos:
 				enemigo.comportamiento(tiempo)
 				enemigo.dibujar(ventana)
-				
+
 				if enemigo.rect.colliderect(jugador.rect):
 					enJuego = False
 					detenerTodo()
@@ -297,7 +296,7 @@ def SpaceInvader():
 					#listaEnemigos.remove(enemigo)
 					enJuego = False
 					detenerTodo()
-					
+
 				if len(enemigo.listaDisparo)>0:
 					for x in enemigo.listaDisparo:
 						x.dibujar(ventana)
